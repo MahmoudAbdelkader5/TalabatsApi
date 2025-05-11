@@ -1,0 +1,11 @@
+C:\Users\master\source\repos\talabatsApi\talabat.services\bin\Debug\net6.0\talabat.services.deps.json
+C:\Users\master\source\repos\talabatsApi\talabat.services\bin\Debug\net6.0\talabat.services.dll
+C:\Users\master\source\repos\talabatsApi\talabat.services\bin\Debug\net6.0\talabat.services.pdb
+C:\Users\master\source\repos\talabatsApi\talabat.services\obj\Debug\net6.0\talabat.services.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\master\source\repos\talabatsApi\talabat.services\obj\Debug\net6.0\talabat.services.AssemblyInfoInputs.cache
+C:\Users\master\source\repos\talabatsApi\talabat.services\obj\Debug\net6.0\talabat.services.AssemblyInfo.cs
+C:\Users\master\source\repos\talabatsApi\talabat.services\obj\Debug\net6.0\talabat.services.csproj.CoreCompileInputs.cache
+C:\Users\master\source\repos\talabatsApi\talabat.services\obj\Debug\net6.0\talabat.services.dll
+C:\Users\master\source\repos\talabatsApi\talabat.services\obj\Debug\net6.0\refint\talabat.services.dll
+C:\Users\master\source\repos\talabatsApi\talabat.services\obj\Debug\net6.0\talabat.services.pdb
+C:\Users\master\source\repos\talabatsApi\talabat.services\obj\Debug\net6.0\ref\talabat.services.dll

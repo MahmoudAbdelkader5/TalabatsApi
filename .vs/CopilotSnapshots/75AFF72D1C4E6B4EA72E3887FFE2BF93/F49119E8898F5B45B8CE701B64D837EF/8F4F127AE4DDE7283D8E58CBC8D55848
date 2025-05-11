@@ -1,0 +1,83 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Talabat.core.model;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+
+namespace talabatRepository.Data
+{
+   public class dbcontextSeed
+    {
+        public static async Task SeedAsync(TalabatDbContext context)
+        {
+            var logger = context.GetService<ILogger<dbcontextSeed>>();
+
+            #region seeding productBrands
+            if (!context.ProductBrands.Any())
+            {
+                try
+                {
+                    var brandsData = File.ReadAllText("Data/dataseed/brands.json"); // Corrected file path  
+                    var brands = JsonSerializer.Deserialize<List<ProductBrand>>(brandsData);
+                    if (brands == null) return;
+                    foreach (var item in brands)
+                    {
+                        await context.ProductBrands.AddAsync(item);
+                    }
+                    await context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    logger?.LogError(ex, "Error seeding ProductBrands");
+                }
+            }
+            #endregion
+
+            #region seeding productTypes
+            if (!context.ProductTypes.Any())
+            {
+                try
+                {
+                    var typesData = File.ReadAllText("Data/dataseed/types.json"); // Corrected file path
+                    var types = JsonSerializer.Deserialize<List<ProductType>>(typesData);
+                    if (types == null) return;
+                    foreach (var item in types)
+                    {
+                        await context.ProductTypes.AddAsync(item);
+                    }
+                    await context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    logger?.LogError(ex, "Error seeding ProductTypes");
+                }
+            }
+            #endregion
+
+            #region seeding products
+            if (!context.Products.Any())
+            {
+                try
+                {
+                    var productsData = File.ReadAllText("Data/dataseed/products.json"); // Corrected file path
+                    var products = JsonSerializer.Deserialize<List<Product>>(productsData);
+                    if (products == null) return;
+                    foreach (var item in products)
+                    {
+                        await context.Products.AddAsync(item);
+                    }
+                    await context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    logger?.LogError(ex, "Error seeding Products");
+                }
+            }
+            #endregion
+        }
+    }
+}
