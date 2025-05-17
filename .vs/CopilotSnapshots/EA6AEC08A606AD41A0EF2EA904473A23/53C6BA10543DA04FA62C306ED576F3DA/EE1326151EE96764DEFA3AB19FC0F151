@@ -1,0 +1,16 @@
+﻿{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.;Database=TalabatsDb;Trusted_Connection=True;Encrypt=False;MultipleActiveResultSets=true",
+    "Redis": "localhost"
+
+  },
+  "ApiUrl": "https://localhost:7051/"
+
+}

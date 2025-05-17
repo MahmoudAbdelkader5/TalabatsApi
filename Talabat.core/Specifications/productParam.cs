@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Talabat.core.Specifications
+{
+    public class productParam
+    {
+        public string ? sort { get; set; }
+        public int? producttype { get; set; }
+        public int? productbrand { get; set; }
+
+        private int pagesize=10;
+
+        public int Pagesize
+        {
+            get { return pagesize; }
+            set { pagesize = value>10?10:value; }
+        }
+        public int pageindex { set; get; }=1;
+        private string ? search;
+
+        public string Search
+        {
+            get { return  search; }
+            set {  search = value.ToLower(); }
+        }
+
+
+
+    }
+}

@@ -1,0 +1,50 @@
+﻿using StackExchange.Redis;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Talabat.core.model;
+using Talabat.core.Repository;
+using talabatRepository.Data;
+using Newtonsoft.Json; // Add this using directive at the top of the file
+
+
+namespace talabatRepository.Repository
+{
+    public class BasketRepo : IBasketRepo
+    {
+        private readonly IConnectionMultiplexer _redis;
+        private readonly IDatabase _context;
+
+        public BasketRepo(IConnectionMultiplexer redis)
+        {
+            _redis = redis;
+            _context = redis.GetDatabase();
+        }
+
+        public async Task<bool> DeleteBasketAsync(string basketId)
+        {
+            return await _context.KeyDeleteAsync(basketId);
+        }
+
+        public async Task<CustomerBasket?> GetBasketAsync(string basketId)
+        {
+            var data = await _context.StringGetAsync(basketId);
+            if (string.IsNullOrEmpty(data))
+                return null;
+
+            var basket = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomerBasket>(data);
+
+            return basket;
+        }
+
+        public async Task<CustomerBasket?> UpdateBasketAsync(CustomerBasket basket)
+        {
+            var created = _context.StringSet(basket.Id, Newtonsoft.Json.JsonConvert.SerializeObject(basket), TimeSpan.FromDays(30));
+            if (!created)
+                return null;
+            return await GetBasketAsync(basket.Id);
+        }
+    }
+}

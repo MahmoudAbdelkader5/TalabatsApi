@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Talabat.core\Talabat.core.csproj" />
+    <ProjectReference Include="..\talabat.services\talabat.services.csproj" />
     <ProjectReference Include="..\talabatRepository\talabatRepository.csproj" />
   </ItemGroup>
 

@@ -85,3 +85,16 @@ C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\Microsoft.
 C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\talabatsApi.staticwebassets.runtime.json
+C:\Users\master\source\repos\talabatsApi\talabatsApi\obj\Debug\net6.0\talabatsApi.sourcelink.json
+C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\StackExchange.Redis.dll
+C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\talabat.services.dll
+C:\Users\master\source\repos\talabatsApi\talabatsApi\bin\Debug\net6.0\talabat.services.pdb

@@ -20,22 +20,15 @@ namespace TalabatRepository.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IReadOnlyList<T>> GetAllAsync()
         {
-            if (typeof(T) == typeof(Product))
-            {
-                var result = (IEnumerable<T>)await _context.Set<T>()
-                    .Include(p => ((Product)(object)p).ProductBrand)
-                    .Include(p => ((Product)(object)p).ProductType)
-                    .ToListAsync();
-                return result;
-            }
+            
             return await _context.Set<T>().ToListAsync();
         }
 
       
 
-        public async Task<IEnumerable<T>> GetAllAsyncspec(ISpecification<T> spec)
+        public async Task<IReadOnlyList<T>> GetAllAsyncspec(ISpecification<T> spec)
         {
             return await ApplySpec(spec).ToListAsync();
         }
@@ -50,6 +43,11 @@ namespace TalabatRepository.Repository
         public async Task<T> GetByIdAsyncspec(ISpecification<T> spec)
         {
             return await ApplySpec(spec).FirstOrDefaultAsync();
+        }
+
+        public async Task<int> Productcount(ISpecification<T> spec)
+        {
+           return await ApplySpec(spec).CountAsync();
         }
 
         private IQueryable<T> ApplySpec(ISpecification<T> spec)

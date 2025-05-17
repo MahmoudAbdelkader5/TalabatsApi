@@ -9,3 +9,5 @@ C:\Users\master\source\repos\talabatsApi\Talabat.core\obj\Debug\net6.0\Talabat.c
 C:\Users\master\source\repos\talabatsApi\Talabat.core\obj\Debug\net6.0\refint\Talabat.core.dll
 C:\Users\master\source\repos\talabatsApi\Talabat.core\obj\Debug\net6.0\Talabat.core.pdb
 C:\Users\master\source\repos\talabatsApi\Talabat.core\obj\Debug\net6.0\ref\Talabat.core.dll
+C:\Users\master\source\repos\talabatsApi\Talabat.core\obj\Debug\net6.0\Talabat.core.sourcelink.json
+C:\Users\master\source\repos\talabatsApi\Talabat.core\obj\Debug\net6.0\Talabat.core.csproj.AssemblyReference.cache

@@ -13,3 +13,4 @@ C:\Users\master\source\repos\talabatsApi\talabatRepository\obj\Debug\net6.0\ref\
 C:\Users\master\source\repos\talabatsApi\talabatRepository\bin\Debug\net6.0\Talabat.core.dll
 C:\Users\master\source\repos\talabatsApi\talabatRepository\bin\Debug\net6.0\Talabat.core.pdb
 C:\Users\master\source\repos\talabatsApi\talabatRepository\obj\Debug\net6.0\talabatR.46719AF0.Up2Date
+C:\Users\master\source\repos\talabatsApi\talabatRepository\obj\Debug\net6.0\talabatRepository.sourcelink.json

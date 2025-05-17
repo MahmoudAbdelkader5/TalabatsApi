@@ -1,10 +1,16 @@
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
+using System.Text;
 using talabatRepository.Data;
-
 using talabatsApi.middleware;
 using talabatsApi.ExtensionMethod;
+using talabatRepository.Identity;
+using Talabat.core.model.identity;
+using Talabat.core.Services;
+using talabat.services.Repository;
 
 namespace talabatsApi
 {
@@ -12,51 +18,143 @@ namespace talabatsApi
     {
         public static async Task Main(string[] args)
         {
-            // Create builder
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container
             builder.Services.AddControllers();
 
-            // Register Swagger/OpenAPI
+            // Swagger/OpenAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            // Register DbContext
+            // Database Context for main data
             builder.Services.AddDbContext<TalabatDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+                sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
-            // Register custom services (extension method)
+            // Identity DbContext
+            builder.Services.AddDbContext<addIdentityDbcontext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultIdentityConnection"),
+                sqlOptions => sqlOptions.EnableRetryOnFailure()));
+
+            // Register Token Services
+            builder.Services.AddScoped<ItokenServices, tokenServices>();
+
+            // Configure Identity
+            builder.Services.AddIdentity<appUser, IdentityRole>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<addIdentityDbcontext>()
+            .AddDefaultTokenProviders();
+
+            // Redis connection
+            builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
+                ConnectionMultiplexer.Connect(new ConfigurationOptions
+                {
+                    EndPoints = { builder.Configuration.GetConnectionString("Redis") },
+                    AbortOnConnectFail = false,
+                    ConnectRetry = 5,
+                    ConnectTimeout = 5000
+                }));
+
+            // Add custom extension services
             builder.Services.AddServicesExtension();
 
-            // Build the app
+            // Configure Authentication with JWT Bearer
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(builder.Configuration["jwt:KEY"])),
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration["Token:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["Token:Audience"],
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true
+                };
+            });
+
+            // CORS policy
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
+
             var app = builder.Build();
 
-            // Migrate and seed database after app is built
+            // Migrate and seed databases
             using (var scope = app.Services.CreateScope())
             {
-                var serviceProvider = scope.ServiceProvider;
-                await serviceProvider.MigrateAndSeedAsync();
+                var services = scope.ServiceProvider;
+                var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+
+                try
+                {
+                    var context = services.GetRequiredService<TalabatDbContext>();
+                    await context.Database.MigrateAsync();
+                    await dbcontextSeed.SeedAsync(context);
+
+                    var identityContext = services.GetRequiredService<addIdentityDbcontext>();
+                    await identityContext.Database.MigrateAsync();
+
+                    var userManager = services.GetRequiredService<UserManager<appUser>>();
+                    await IdentityDbContextSeed.SeedAsync(userManager);
+                }
+                catch (Exception ex)
+                {
+                    var logger = loggerFactory.CreateLogger<Program>();
+                    logger.LogError(ex, "An error occurred during database migration or seeding");
+                }
             }
 
-            // Middleware configuration
+            // Middleware pipeline
+            app.UseMiddleware<ExceptionMiddleware>();
+
             if (app.Environment.IsDevelopment())
             {
-                app.UseMiddleware<ExceptionMiddleware>();
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
+            // Handle status code pages
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
-            app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            // CORS before authentication
+            app.UseCors("AllowAll");
+
+            // Authentication & Authorization
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            // Map controllers
             app.MapControllers();
 
-            // Run the app
-             app.Run();
+            await app.RunAsync();
         }
     }
 }

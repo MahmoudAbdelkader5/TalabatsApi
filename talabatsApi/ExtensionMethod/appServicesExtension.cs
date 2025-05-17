@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Talabat.core.Repository;
 using talabatRepository.Data;
+using talabatRepository.Identity;
+using talabatRepository.Repository;
 using TalabatRepository.Repository;
 using talabatsApi.Error;
 using talabatsApi.Helper;
@@ -19,6 +21,8 @@ namespace talabatsApi.ExtensionMethod
         {
             // Register repositories
             services.AddScoped(typeof(IgerenicRepo<>), typeof(GenericRepo<>));
+            services.AddScoped<IBasketRepo, BasketRepo>();
+
             services.AddAutoMapper(typeof(profiles));
 
             // Configure API behavior
@@ -50,6 +54,9 @@ namespace talabatsApi.ExtensionMethod
             try
             {
                 var context = serviceProvider.GetRequiredService<TalabatDbContext>();
+                var identityContext = serviceProvider.GetRequiredService<addIdentityDbcontext>();
+               await identityContext.Database.MigrateAsync();
+
                 await context.Database.MigrateAsync();
 
                 await dbcontextSeed.SeedAsync(context);

@@ -11,9 +11,10 @@ namespace Talabat.core.Repository
     public interface IgerenicRepo <T> where T : BaseEntity 
     {
         Task<T> GetByIdAsync(int id);
-        Task<IEnumerable<T>> GetAllAsync();
-        public Task<IEnumerable<T>> GetAllAsyncspec( ISpecification<T> spec);
+        Task<IReadOnlyList<T>> GetAllAsync();
+        public Task<IReadOnlyList<T>> GetAllAsyncspec( ISpecification<T> spec);
         public Task<T> GetByIdAsyncspec( ISpecification<T> spec);
+        Task<int> Productcount(ISpecification<T> spec);
 
 
 
